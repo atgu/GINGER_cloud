@@ -2,7 +2,7 @@
 We use it as a data delivery service in the cloud. This how NeuroGAP genetic and phenotypic data are distributed. To get started, go to: https://app.terra.bio/#workspaces. 
 You should see something like this:
 
-![](img/Terra/Terra main page.png)
+![](img/Terra/Terra%20main%20page.png)
 
 ## Workspaces and permissions
 Workspaces have permissions associated with them, much like on a computing cluster. Some workspaces are completely public, especially public resources like high coverage <a href="https://app.terra.bio/#workspaces/anvil-datastorage/1000G-high-coverage-2019">1000 Genomes Project data</a>. Others, like the NeuroGAP data, have restricted access to specific users (default for individual-level genetic and phenotypic data). Your access is given through your Google-enabled email address (most likely your [user]@broadinstitute.org address).
