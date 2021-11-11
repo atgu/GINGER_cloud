@@ -16,7 +16,7 @@ The landing page should give you some description of the dataset. There are two 
 
 ![](img/Terra/Terra%201kG%20workspace%20data%20page.png)
 
-The sample table is typically the only one that is complete. Typically, we simply download the sample information as a `.tsv` file using the "Download all rows" button. (That is often the extent of our interaction with sample information in Terra.)
+The sample table is typically the only one that is complete. We usually just download the sample information as a `.tsv` file using the "Download all rows" button. (That is often the extent of our interaction with sample information in Terra.)
 
 Now back on the Dashboard, you can see where the data actual lives in a google bucket. The clipboard copies the link (allowing `gsutil` and command line access), and the "Open in browser" button allows you to interact with the bucket using the web interface, like this:
 
