@@ -17,9 +17,18 @@
 - Click the navigation menu (aka the "hamburger menu" as it has 3 lines that look like a hamburger)
   - Pinning is a great way to save the things you come back to often
 
-![Console navigation](img/Console/Console%20navigation.png)
-[comment]: <> (<img src="img/Console/Console%20navigation.png" width="600" alt="Console naviagation" />)
+<img src="img/Console/Console%20navigation.png" width="600" alt="Console naviagation" />
 
 - The most commonly used features are `Cloud Storage` and `Compute Engine`
 
 ![Console compute engine](img/Console/Console%20compute%20engine.png)
+
+- VM instances show you what you have currently running, and you can create, stop, and delete them.
+  - Make sure you delete your instances once you're done using them!
+
+- The Cloud Storage Browser allows you to browse files within that project.
+
+![Console storage browser](img/Console/Console%20storage%20browser.png)
+
+- The top level of the structure are known as "buckets" which hold a collection of files. Bucket names are *globally* unique (since we now have `neurogap_phenos_genos`, no one else in the world can create that bucket).
+
