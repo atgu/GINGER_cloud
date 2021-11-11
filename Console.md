@@ -32,3 +32,9 @@
 
 - The top level of the structure are known as "buckets" which hold a collection of files. Bucket names are *globally* unique (since we now have `neurogap_phenos_genos`, no one else in the world can create that bucket).
 
+![Console storage browser 2](img/Console/Console%20storage%20browser%202.png)
+
+- Clicking on a file shows information about the file, and an ultra-useful "copy gsutil path to clipboard" button:
+  - We'll use this path frequently when we use the command line to manipulate or download files, or load them into RStudio. 
+
+![Console storage file details](img/Console/Console%20storage%20file%20details.png)
