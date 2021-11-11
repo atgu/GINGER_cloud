@@ -22,7 +22,7 @@ Now back on the Dashboard, you can see where the data actual lives in a google b
 
 ![](img/Terra/Terra%201kG%20google%20bucket%20link%20out.png)
 
-You can click on the folders and navigate deeper in, just like on your own computer. You will see that path completing as you navigate around. Learn more about this in `Console.md`.
+You can click on the folders and navigate deeper in, just like on your own computer. You will see that path completing as you navigate around. Learn more about this in [the Cloud Console tutorial](Console.md).
 
 #### NeuroGAP phenotype workspace
 
@@ -47,7 +47,7 @@ Typically, we download this file and load it into R, then generate summaries of 
 
 #### GINGERIIMAK
 
-You have access to this workspace, which has a combination of the genetic and phenotypic datasets described above. We have compiled the genotype data from not Uganda, but from all sites participating in NeuroGAP. This merged dataset has also been QC'd. When you open the workspace, it looks like this:
+You have access to this workspace, which has a combination of the genetic and phenotypic datasets described above. We have compiled the genotype data from not just Uganda, but from all sites participating in NeuroGAP. This merged dataset has also been QC'd. When you open the workspace, it looks like this:
 
 ![](img/Terra/Terra%20gingeriimak%20landing%20page.png)
 
