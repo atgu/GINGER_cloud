@@ -19,11 +19,16 @@
 
 ![Console navigation](img/Console/Console%20navigation.png)
 
-- The most commonly used features are `Cloud Storage` and `Compute Engine`
+- The most commonly used features are `Compute Engine` and `Cloud Storage`
 
 ![Console compute engine](img/Console/Console%20compute%20engine.png)
 
-- VM instances show you what you have currently running, and you can create, stop, and delete them.
+- `Compute Engine` is the service that allows you to run any number of "computers"
+  - Technically, they're not individual computers, but "virtual machines" (VMs)
+  - These simulate the idea of a computer: a CPU, some memory, some disk space
+  - When you start a VM, Google Cloud reserves these things for you. When you delete it, they go back into the pool.
+  - The power of the Cloud is that you can create one, ten, or thousands of these VMs and run lots of things in parallel.
+- `VM instances` show you what you have currently running, and you can create, stop, and delete them.
   - Make sure you delete your instances once you're done using them!
 
 - The Cloud Storage Browser allows you to browse files within that project.
