@@ -1,6 +1,6 @@
 # Google Cloud Console
 
-## Walkthrough
+## Overview
 
 - Go to [console.cloud.google.com](https://console.cloud.google.com/)
 
@@ -21,6 +21,8 @@
 
 - The most commonly used features are `Compute Engine` and `Cloud Storage`
 
+## Compute engine
+
 ![Console compute engine](img/Console/Console%20compute%20engine.png)
 
 - `Compute Engine` is the service that allows you to run any number of "computers"
@@ -30,6 +32,8 @@
   - The power of the Cloud is that you can create one, ten, or thousands of these VMs and run lots of things in parallel.
 - `VM instances` show you what you have currently running, and you can create, stop, and delete them.
   - Make sure you delete your instances once you're done using them!
+
+## Cloud storage
 
 - The Cloud Storage Browser allows you to browse files within that project.
 
