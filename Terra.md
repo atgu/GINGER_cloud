@@ -8,7 +8,7 @@ You should see something like this:
 Workspaces have permissions associated with them, much like on a computing cluster. Some workspaces are completely public, especially public resources like high coverage <a href="https://app.terra.bio/#workspaces/anvil-datastorage/1000G-high-coverage-2019">1000 Genomes Project data</a>. Others, like the NeuroGAP data, have restricted access to specific users (default for individual-level genetic and phenotypic data). Your access is given through your Google-enabled email address (most likely your [user]@broadinstitute.org address).
 
 #### 1000 Genomes Project workspace
-We'll start here to show all the utilities of a fully featured workspace. The landing page looks like this:
+We'll start with the 1000 Genomes Project workspace (<a href="https://app.terra.bio/#workspaces/anvil-datastorage/1000G-high-coverage-2019">here</a>) to show all the utilities of a fully featured workspace. The landing page looks like this:
 
 ![](img/Terra/Terra%201kG%20workspace%20landing%20page.png)
 
