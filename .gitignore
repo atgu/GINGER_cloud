@@ -39,4 +39,4 @@ vignettes/*.pdf
 .Renviron
 
 .idea/
-img/.DS_Store
+.DS_Store

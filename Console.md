@@ -17,7 +17,7 @@
 - Click the navigation menu (aka the "hamburger menu" as it has 3 lines that look like a hamburger)
   - Pinning is a great way to save the things you come back to often
 
-<img src="img/Console/Console%20navigation.png" width="600" alt="Console naviagation" />
+![Console navigation](img/Console/Console%20navigation.png)
 
 - The most commonly used features are `Cloud Storage` and `Compute Engine`
 
