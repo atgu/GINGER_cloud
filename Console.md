@@ -31,7 +31,7 @@
   - When you start a VM, Google Cloud reserves these things for you. When you delete it, they go back into the pool.
   - The power of the Cloud is that you can create one, ten, or thousands of these VMs and run lots of things in parallel.
 - `VM instances` show you what you have currently running, and you can create, stop, and delete them.
-  - Make sure you delete your instances once you're done using them!
+  - **Make sure you stop your instances when you're not using them, and delete them once you're done using them**, as these accrue costs
 
 ## Cloud storage
 
