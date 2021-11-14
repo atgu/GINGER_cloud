@@ -10,7 +10,7 @@
   - `gcloud` - Google Cloud
   - `gsutil` - Google (Cloud) Storage utilities
   
-### Commands
+### Running new commands
 - We'll walk through some basics of these utilities, but if you get stuck, try running command itself on its own
 - This is advice for `gcloud`, but also for every other command you may encounter.
 - If you get stuck/don't know what to do:
@@ -27,7 +27,26 @@
 ### Using gsutil
 - We will mostly use `gsutil` to move files around
 - The main commands are similar to Unix:
-  - `gsutil ls`: List a directory
+  - `gsutil ls`: List a directory or buckets
+```bash
+~ $ gsutil ls
+gs://neurogap_phenos_genos/
+~ $ gsutil ls gs://neurogap_phenos_genos/
+gs://neurogap_phenos_genos/NeuroGAP-P_Release5_AllSites.csv
+gs://neurogap_phenos_genos/NeuroGAP-P_Release5_AllSites.pdf
+gs://neurogap_phenos_genos/NeuroGAP-P_Release5_DataDict.csv
+gs://neurogap_phenos_genos/NeuroGAP_pilot_clean.bed
+gs://neurogap_phenos_genos/NeuroGAP_pilot_clean.bim
+gs://neurogap_phenos_genos/NeuroGAP_pilot_clean.fam
+gs://neurogap_phenos_genos/NeuroGAP_pilot_clean_grch38.bed
+gs://neurogap_phenos_genos/NeuroGAP_pilot_clean_grch38.bim
+gs://neurogap_phenos_genos/NeuroGAP_pilot_clean_grch38.fam
+gs://neurogap_phenos_genos/gnomad_meta_hgdp_tgp_v1.txt
+gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.bed
+gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.bim
+gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.fam
+gs://neurogap_phenos_genos/file_fixes/
+```
   - `gsutil mv`: Move a file, or rename it
   - `gsutil cp`: Copy a file (and also possibly rename it)
 
