@@ -32,6 +32,8 @@
   - The power of the Cloud is that you can create one, ten, or thousands of these VMs and run lots of things in parallel.
 - `VM instances` show you what you have currently running, and you can create, stop, and delete them.
   - **Make sure you stop your instances when you're not using them, and delete them once you're done using them**, as these accrue costs
+  
+![Console start VM](img/Console/Console%20start%20VM.png)
 
 ## Cloud storage
 
