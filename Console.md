@@ -35,6 +35,14 @@
   
 ![Console start VM](img/Console/Console%20start%20VM.png)
 
+On this page, you'll need to change the following options:
+- Name: `[your first name]`
+- Zone: `us-central1-b`
+- Boot disk > Change: 
+    - Operating system: `Ubuntu`
+    - Version (if not already selected): `Ubuntu 18.04 LTS`
+- Access scopes: `Allow full access to all cloud APIs`
+
 ## Cloud storage
 
 - The Cloud Storage Browser allows you to browse files within that project.
