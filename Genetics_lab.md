@@ -363,20 +363,132 @@ Now we need to filter to SNPs that are in both datasets. We can do this by filte
 
 `./plink --bfile hgdp_tgp_neurogap --geno 0.05 --make-bed --out hgdp_tgp_neurogap_geno05`
 
-Always take a closer look at the plink output. Here, we can see that we have 23,693 variants and 4,991 individuals remaining. We removed most of our SNPs!
+Always take a closer look at the plink output. Here, we can see that we have 23,693 variants and 4,991 individuals remaining. We removed most of our SNPs! This is because we already filtered the HGDP and 1000 Genomes data to common, independent variants. Before filtering, this sequenced dataset had ~155 million genetic variants. That's huge! (And would have made this tutorial a bit unwieldy.) So removing most SNPs is actually to be expected. 
 
 ![](img/Genetics_lab/intersect_data.png)
 
-Normally we would filter for minor allele frequency and LD. Because there are so few SNPs, we can probably skip these steps for now, but as homework, check out the `--maf` and `--indep-pairwise` options for these steps, respectively.
+Because the HGDP and 1000 Genomes dataset has already been filtered based on minor allele frequency and LD, we didn't expect this to remove many SNPs. We will still walk through these steps with the NeuroGAP + HGDP + 1000 Genomes merged dataset though as you will likely need to do this a lot with genetic data in the future.
 
-Next is PCA...
+#### MAF and LD filtering 
+
+To run MAF filtering, you can simply use the `--maf` flag, described <a href="https://www.cog-genomics.org/plink/1.9/filter#maf">here</a>. Remove SNPs with a frequency < 0.05 as follows:
+
+`./plink --bfile hgdp_tgp_neurogap_geno05 --maf 0.05 --make-bed --out hgdp_tgp_neurogap_geno05_maf05`
+
+We removed only 220 SNPs, as expected. Now we will filter based on LD using the `indep-pairwise` flag as described more <a href="https://www.cog-genomics.org/plink/1.9/ld#indep">here</a>. What do you think the following means?
+
+`--indep-pairphase <window size>['kb'] <step size (variant ct)> <r^2 threshold>`
+
+We will run the following to prune SNPs based on their LD correlation in this dataset:
+
+`./plink --bfile hgdp_tgp_neurogap_geno05_maf05 --indep-pairwise 50 5 0.5`
+
+We removed 0 SNPs due to LD, also as expected (HGDP and 1000 Genomes already captured the correlation structure of very ancestrally diverse genomes, so adding in the NeuroGAP samples isn't expected to change the LD structure much.)
+
+#### Relatedness
+
+We already know there are some related individuals in the 1000 Genomes dataset, and there may be additional relatives across cohorts. `plink` has a `--genome` flag that we could use to approximate relatedness, but it tends to do somewhat poorly in cohorts with ancestrally diverse populations. Instead, we will use software called `king`, described more <a href="https://www.kingrelatedness.com/">here</a>. On the download page, copy the link to the pre-compiled binary for Linux since we are running this software on our VM, like you did when you were installing `plink`. Then we will use the following to download the king binary on our VM:
+
+`wget https://www.kingrelatedness.com/Linux-king.tar.gz`
+
+The `.tar.gz` file extension means we need to unzip this compressed file, this time using `tar` instead of `unzip`. Google is a very helpful source for learning more about zipping (compressing) and unzipping (decompressing) tar files (e.g. <a href="https://linuxize.com/post/how-to-extract-unzip-tar-gz-file/">here</a>).
+
+```
+tar -zxvf Linux-king.tar.gz
+```
+
+Awesome! We now have the `king` binary. Let's test it out:
+
+`./king`
+
+Uh oh, you should be seeing this error:
 
 ```bash
-./plink --bfile ALL.geno02.unrel \
---read-genome ALL.geno02.unrel.genome \
+./king: error while loading shared libraries: libquadmath.so.0: cannot open shared object file: No such file or directory
+```
+
+This can happen because we don't have the compiler needed. We will need to install a few additional helpers. The king installation documents these as prerequisites, which we learned about more by trying to install from source. You should be able to get your precompiled version running by running the following, which updates and adds some packages to your VM:
+
+```
+sudo apt-get update
+sudo apt-get install g++ clang libc++-helpers pentium-builder
+```
+
+Great! All of our prerequisites are installed. Now let's try the `king` command again by running:
+
+`./king`
+
+You should see the following indicator that the software works now:
+
+```bash
+./king
+KING 2.2.7 - (c) 2010-2021 Wei-Min Chen
+
+The following parameters are in effect:
+                   Binary File :                 (-bname)
+
+Additional Options
+         Close Relative Inference : --related, --duplicate
+   Pairwise Relatedness Inference : --kinship, --ibdseg, --ibs, --homog
+              Inference Parameter : --degree, --seglength
+         Relationship Application : --unrelated, --cluster, --build
+                        QC Report : --bysample, --bySNP, --roh, --autoQC
+                     QC Parameter : --callrateN, --callrateM
+             Population Structure : --pca, --mds
+              Structure Parameter : --projection, --pcs
+              Disease Association : --tdt
+   Quantitative Trait Association : --mtscore
+                Association Model : --trait [], --covariate []
+            Association Parameter : --invnorm, --maxP
+               Genetic Risk Score : --risk, --model [], --prevalence, --noflip
+              Computing Parameter : --cpus
+                   Optional Input : --fam [], --bim [], --sexchr [23]
+                           Output : --rplot, --pngplot, --plink
+                 Output Parameter : --prefix [king], --rpath []
+
+
+FATAL ERROR -
+Genotype files are required. e.g.,
+  king -b ex.bed --related
+
+Please check the reference paper Manichaikul et al. 2010 Bioinformatics,
+					Chen et al. 2021,
+          or the KING website at kingrelatedness.com
+```
+
+Now that we have a `king` binary, running `king` is a lot like running `plink`. We will use `king` to identify pairs of people within 2 degrees of relatedness. From the documentation, we should be able to run this as follows:
+
+`./king -b hgdp_tgp_neurogap_geno05_maf05.bed --unrelated --degree 2 --cpu 8 --prefix hgdp_tgp_neurogap_geno05_maf05_`  
+
+King wrote out files consisting of who is related and unrelated. Now we need to use plink to remove those individuals from our dataset, as follows:
+
+`./plink --bfile hgdp_tgp_neurogap_geno05_maf05 --keep hgdp_tgp_neurogap_geno05_maf05_unrelated.txt --make-bed --out hgdp_tgp_neurogap_geno05_maf05_unrel` 
+
+#### PCA
+
+Now we can finally run PCA, which will give us some information about ancestry in NeuroGAP, contextualized with HGDP and 1000 Genomes! We will use the `--cluster` and `--mds-plot` flags in `plink`, which you can learn more about <a href="https://www.cog-genomics.org/plink/1.9/strat">here</a>. We will compute the first 10 PCs as follows:
+
+```bash
+./plink --bfile hgdp_tgp_neurogap_geno05_maf05_unrel \
 --cluster \
 --K 2 \
 --mds-plot 10 \
---out ALL.geno02.unrel.mds
-
+--out hgdp_tgp_neurogap_geno05_maf05_unrel_mds
 ```
+
+Great! Now your first 10 PCs for the combined datasets are in this file: `hgdp_tgp_neurogap_geno05_maf05_unrel_mds.mds`. Let's also create one that is only contains the NeuroGAP data (without the reference panels), as follows:
+
+```bash
+./plink --bfile NeuroGAP_pilot_clean_grch38_autosomes \
+--cluster \
+--K 2 \
+--mds-plot 10 \
+--out NeuroGAP_pilot_clean_grch38_autosomes_mds
+```
+
+We will plot both of these later during the [RStudio lab](RStudio.md).
+
+ 
+#### File organization
+
+As a note, our files are getting quite messy at this stage. We will clean these up and talk about file organization strategies we use. A requirement for all projects is keeping a lab notebook so that you can reproduce every step of your work. This will likely contain sets of commands you've run with dates alongside a code repository (e.g. put your scripts on github - this makes it easier to share with others and get feedback). We also always remove intermediate files when we're done with them so we don't pay for unnecessary storage. Get in the habit of cleaning up your files and keeping solid documentation as you go, as this will save you a lot of effort down the road.
