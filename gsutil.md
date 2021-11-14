@@ -53,6 +53,8 @@ gs://neurogap_phenos_genos/file_fixes/
 ### Examples:
 - Copy a file to a different folder: `gsutil cp gs://bucket/file.txt gs://bucket/folder/`
 - Move a file to a different bucket: `gsutil mv gs://bucket/file.txt gs://bucket2/`
+- Copy a file from the cloud to your local machine: `gsutil cp gs://bucket/file.txt .`
+- Copy a file from your local machine to the cloud: `gsutil cp myfile.txt gs://bucket/`
 - Rename a file: `gsutil mv gs://bucket/file.txt gs://bucket/file2.txt`
 
 ### gcloud
