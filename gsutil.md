@@ -47,6 +47,22 @@ gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.bed
 gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.bim
 gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.fam
 gs://neurogap_phenos_genos/file_fixes/
+~ $ gsutil ls -lh gs://neurogap_phenos_genos/  # -l is "long listing", -h is "human readable" (file sizes)
+    27 MiB  2021-10-26T14:23:23Z  gs://neurogap_phenos_genos/NeuroGAP-P_Release5_AllSites.csv
+  1.04 MiB  2021-10-26T14:23:23Z  gs://neurogap_phenos_genos/NeuroGAP-P_Release5_AllSites.pdf
+106.53 KiB  2021-10-26T14:23:23Z  gs://neurogap_phenos_genos/NeuroGAP-P_Release5_DataDict.csv
+ 73.64 MiB  2021-10-26T14:22:28Z  gs://neurogap_phenos_genos/NeuroGAP_pilot_clean.bed
+ 10.21 MiB  2021-10-26T14:22:29Z  gs://neurogap_phenos_genos/NeuroGAP_pilot_clean.bim
+ 29.72 KiB  2021-10-26T14:22:29Z  gs://neurogap_phenos_genos/NeuroGAP_pilot_clean.fam
+ 71.13 MiB  2021-11-13T00:26:18Z  gs://neurogap_phenos_genos/NeuroGAP_pilot_clean_grch38.bed
+ 13.05 MiB  2021-11-13T00:26:21Z  gs://neurogap_phenos_genos/NeuroGAP_pilot_clean_grch38.bim
+ 27.25 KiB  2021-11-13T00:25:52Z  gs://neurogap_phenos_genos/NeuroGAP_pilot_clean_grch38.fam
+  5.63 MiB  2021-10-26T14:31:51Z  gs://neurogap_phenos_genos/gnomad_meta_hgdp_tgp_v1.txt
+242.57 MiB  2021-10-26T14:21:23Z  gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.bed
+   8.9 MiB  2021-10-26T14:21:23Z  gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.bim
+  89.8 KiB  2021-10-26T14:21:23Z  gs://neurogap_phenos_genos/hgdp_tgp_UPDATED.fam
+                                 gs://neurogap_phenos_genos/file_fixes/
+TOTAL: 13 objects, 475441385 bytes (453.42 MiB)
 ```
   - `gsutil mv`: Move a file, or rename it
   - `gsutil cp`: Copy a file (and also possibly rename it)
@@ -68,6 +84,6 @@ gs://neurogap_phenos_genos/file_fixes/
 - `gcloud compute instances list`: look at what instances are currently running
 - `gcloud compute instances create VM_NAME`: create a new VM named `VM_NAME`
   - We'll mostly do this from the [Cloud console](Console.md), but sometimes it's useful to programmatically generate multiple VMs
-- `gcloud compute instnaces stop VM_NAME`: stop the VM
-- `gcloud compute instnaces start VM_NAME`: start a stopped VM
+- `gcloud compute instances stop VM_NAME`: stop the VM
+- `gcloud compute instances start VM_NAME`: start a stopped VM
 - `gcloud compute ssh VM_NAME`: connect into a VM you have running
