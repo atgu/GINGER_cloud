@@ -28,12 +28,26 @@
 ![RStudio running](img/RStudio/RStudio%20running.png)
 
 - You now have RStudio running in the cloud!
+- Let's install `tidyverse` since it doesn't ship with it for some reason
+```R
+install.packages('tidyverse')
+```
 
 ## Getting data
 
 - Click `Terminal`
 - Here we have our `gsutil` program already installed and it is already set up with permissions
-- `gsutil cp gs:// .`
+- Let's see what files we can use:
+  - `gsutil ls`
+- Let's grab a phenotype file:
+  - `gsutil cp gs://neurogap_phenos_genos/NeuroGAP-P_Release5_AllSites.csv .`
+- Read in this file:
+```R
+library(tidyverse)
+data = read_csv('NeuroGAP-P_Release5_AllSites.csv')
+theme_set(theme_classic())
+data %>% ggplot + aes(x = age_at_iview) + geom_histogram()
+```
 
 ## Stopping RStudio
 
