@@ -347,21 +347,9 @@ We're ready run analyses in plink now! The first step is merging the data. We wi
 
 `./plink --bfile NeuroGAP_pilot_clean_grch38 --bmerge hgdp_tgp_UPDATED --make-bed --out hgdp_tgp_neurogap --allow-extra-chr`
 
-Shoot, this gives us errors because some of our SNP IDs are too long. Plink says it can't handle SNP IDs with more than 80 characters. This can happen when you have sequencing data (HGDP + 1000 Genomes dataset) because indels and CNVs can encompass many base pairs. It's not very frequent though, so we can just remove these for our purposes. A quick google search shows us how to find long fields <a href="https://www.unix.com/shell-programming-and-scripting/175907-count-number-characters-particular-column.html">here</a>. (Again, Google is your friend for coding, try starting here first.) We may as well also remove the extra contigs while we're at it.
-
-`awk 'length($2) > 80 {print $2}' hgdp_tgp_UPDATED.bim > hgdp_tgp_long_snps.txt`
-
-Now we need to remove these SNPs from the HGDP + 1000 Genomes data (using the `--exclude` option, as described <a href="https://www.cog-genomics.org/plink/1.9/filter#snp">here</a> and try the merge again, as follows:
-
-```
-./plink --bfile hgdp_tgp_UPDATED --exclude hgdp_tgp_long_snps.txt --chr 1-22 --make-bed --out hgdp_tgp_autosomes_exclude
-./plink --bfile NeuroGAP_pilot_clean_grch38 --chr 1-22 --make-bed --out NeuroGAP_pilot_clean_grch38_autosomes --allow-extra-chr
-./plink --bfile NeuroGAP_pilot_clean_grch38_autosomes --bmerge hgdp_tgp_autosomes_exclude --chr 1-22 --make-bed --out hgdp_tgp_neurogap
-```
-
 Now we need to filter to SNPs that are in both datasets. We can do this by filtering on missingness (`--geno`, read more <a href="https://www.cog-genomics.org/plink/1.9/filter#missing">here</a>) since the datasets are comparable in size, as follows:
 
-`./plink --bfile hgdp_tgp_neurogap --geno 0.05 --make-bed --out hgdp_tgp_neurogap_geno05`
+`./plink --bfile hgdp_tgp_neurogap --geno 0.05 --make-bed --out hgdp_tgp_neurogap_geno05 --allow-extra-chr`
 
 Always take a closer look at the plink output. Here, we can see that we have 23,693 variants and 4,991 individuals remaining. We removed most of our SNPs! This is because we already filtered the HGDP and 1000 Genomes data to common, independent variants. Before filtering, this sequenced dataset had ~155 million genetic variants. That's huge! (And would have made this tutorial a bit unwieldy.) So removing most SNPs is actually to be expected. 
 
