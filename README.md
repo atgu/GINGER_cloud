@@ -1,9 +1,16 @@
 # GINGER Cloud Computing training
 
 ## Modules
+
+### Day 1 (11/15/21)
 - [Cloud console](Console.md)
-- [Terra](Terra.md)
 - [gsutil](gsutil.md)
+- [Terra](Terra.md)
+
+### Day 2 (11/16/21)
+- [Genetics lab](Genetics_lab.md)
+
+### Day 3 (11/17/21)
 - [RStudio](RStudio.md)
 
 ### Additional resources:
