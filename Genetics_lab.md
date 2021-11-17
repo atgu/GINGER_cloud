@@ -474,6 +474,12 @@ Great! Now your first 10 PCs for the combined datasets are in this file: `hgdp_t
 --out NeuroGAP_pilot_clean_grch38_autosomes_mds
 ```
 
+Let's copy both of these to persistent storage so that we can get them later:
+```
+gsutil cp hgdp_tgp_neurogap_geno05_maf05_unrel_mds.mds gs://neurogap_phenos_genos/pca/[YOURNAME].mds
+gsutil cp NeuroGAP_pilot_clean_grch38_autosomes_mds.mds gs://neurogap_phenos_genos/pca/[YOURNAME]_neurogap.mds
+```
+
 We will plot both of these later during the [RStudio lab](RStudio.md).
 
  
