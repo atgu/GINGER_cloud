@@ -92,6 +92,7 @@ data %>% count(study_country, lang_self_1) %>%
   - We wrote this function to extract information from the data_dict.
   - We won't go into detail on it but if you copy it and execute this cell, we can use the function later.
 ```
+library(data.table)
 extract_from_field = function(data_dict, field, new_field_name = 'new_field') {
   output = data_dict %>%
     filter(`Field Name` == field) %>%
