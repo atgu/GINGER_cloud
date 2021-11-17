@@ -48,6 +48,11 @@ data = read_csv('NeuroGAP-P_Release5_AllSites.csv')
 theme_set(theme_classic())
 data %>% ggplot + aes(x = age_at_iview) + geom_histogram()
 ```
+- Let's get your PCA data:
+```
+gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME]_neurogap.mds .
+gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME].mds .
+```
 
 ## Stopping RStudio
 
