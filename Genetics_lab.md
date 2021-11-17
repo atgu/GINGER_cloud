@@ -467,7 +467,7 @@ Now we can finally run PCA, which will give us some information about ancestry i
 Great! Now your first 10 PCs for the combined datasets are in this file: `hgdp_tgp_neurogap_geno05_maf05_unrel_mds.mds`. Let's also create one that is only contains the NeuroGAP data (without the reference panels), as follows:
 
 ```bash
-./plink --bfile NeuroGAP_pilot_clean_grch38_autosomes \
+./plink --bfile NeuroGAP_pilot_clean_grch38 \
 --cluster \
 --K 2 \
 --mds-plot 10 \
