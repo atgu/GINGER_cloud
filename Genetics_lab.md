@@ -473,6 +473,10 @@ Great! Now your first 10 PCs for the combined datasets are in this file: `hgdp_t
 --mds-plot 10 \
 --out NeuroGAP_pilot_clean_grch38_autosomes_mds
 ```
+Look at the file!
+```
+less NeuroGAP_pilot_clean_grch38_autosomes_mds.mds
+```
 
 Let's copy both of these to persistent storage so that we can get them later:
 ```
