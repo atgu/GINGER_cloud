@@ -117,7 +117,7 @@ data %>%
   ggplot + aes(x = ethnicity, y = language, fill = n) +
   geom_tile()
 
-data %>% left_join(sites) %>% left_join(languages) %>%
+data %>% left_join(countries) %>% left_join(languages) %>%
   count(country, language) %>%
   group_by(country) %>%
   slice_max(order_by = n, n = 3)
