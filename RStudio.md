@@ -139,6 +139,13 @@ ggplot(pca_data) + aes(x = C1, y = C2) + geom_point()
 ggplot(pca_data) + aes(x = C1, y = C2, color = FID) + geom_point()
 ```
 - So many populations!
+- Let's look just at NeuroGAP:
+```
+neurogap_pca_data = read_table('[YOURNAME]_neurogap.mds')
+neurogap_pca_data %>%
+  ggplot + aes(x = C1, y = C2) + geom_point()
+```
+- Color this by population
 
 ## Stopping RStudio
 
