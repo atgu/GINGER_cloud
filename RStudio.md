@@ -39,19 +39,98 @@ install.packages('tidyverse')
 - Here we have our `gsutil` program already installed and it is already set up with permissions
 - Let's see what files we can use:
   - `gsutil ls`
-- Let's grab a phenotype file:
-  - `gsutil cp gs://neurogap_phenos_genos/NeuroGAP-P_Release5_AllSites.csv .`
+- Let's grab the phenotype files:
+  - `gsutil cp gs://neurogap_phenos_genos/NeuroGAP-P_Release5_*.csv .`
 - Read in this file:
 ```R
 library(tidyverse)
 data = read_csv('NeuroGAP-P_Release5_AllSites.csv')
 theme_set(theme_classic())
-data %>% ggplot + aes(x = age_at_iview) + geom_histogram()
 ```
-- Let's get your PCA data:
+## What are all these fields?
+```
+View(data)
+```
+## Someone wrote a data dictionary!
+```
+data_dict = read_csv('NeuroGAP-P_Release5_DataDict.csv')
+View(data_dict)
+```
+## `age_at_iview` looks straightforward. let's plot it!
+```
+ggplot(data) + aes(x = age_at_iview) + geom_histogram()
+```
+## Same with `is_case`. Let's count it
+```
+data %>% group_by(is_case) %>% summarise(n=n())
+```
+## `count(...)` is a shortcut for `group_by(...) %>% summarize(n=n())`
+```
+data %>% count(is_case)
+```
+## Can you look at this by country too?
+- Hint: Try writing a command that splits by both `is_case` and `study_country`
+
+## Digging into the phenotype:
+## Kessler Psychological Distress Scale (K10) - kten_total
+```
+ggplot(data) + aes(x = kten_total) + geom_histogram()
+```
+## Can you plot this by country to see if there are any systematic difference in phenotype definition?
+- Hint: Try using the `fill` aesthetic. Or better yet, `facet_grid` or `facet_wrap`
+
+## Some demographic information:
+```
+data %>% count(study_country, lang_self_1)
+data %>% count(study_country, lang_self_1) %>%
+  group_by(study_country) %>%
+  slice_max(order_by = n, n = 3)
+```
+
+## As with many datasets you'll get, many of the fields are coded
+- We wrote this function to extract information from the data_dict.
+  - We won't go into detail on it but if you copy it and execute this cell, we can use the function later.
+```
+extract_from_field = function(data_dict, field, new_field_name = 'new_field') {
+  output = data_dict %>%
+    filter(`Field Name` == field) %>%
+    select(`Coded Values OR Formula`)
+  return(tibble(fread(output[[1]])) %>% rename(!!field := 'V1',
+                                               !!new_field_name := 'V2'))
+}
+```
+## Now let's use it!
+```
+ethnicities = extract_from_field(data_dict, 'ethnicity_1', 'ethnicity') 
+languages = extract_from_field(data_dict, 'lang_self_1', 'language')
+countries = extract_from_field(data_dict, 'study_country', 'country')
+sites = extract_from_field(data_dict, 'study_site', 'site')
+```
+
+## Combine these in to get the annotations in
+```
+data %>%
+  left_join(ethnicities) %>%
+  left_join(languages) %>%
+  count(ethnicity, language) %>%
+  ggplot + aes(x = ethnicity, y = language, fill = n) +
+  geom_tile()
+
+data %>% left_join(sites) %>% left_join(languages) %>%
+  count(country, language) %>%
+  group_by(country) %>%
+  slice_max(order_by = n, n = 3)
+```
+
+## Let's get your PCA data:
 ```
 gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME]_neurogap.mds .
 gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME].mds .
+```
+## Read it in
+```
+pca_data = read_tsv("[YOURNAME].mds")
+ggplot(pca_data) + aes(x = PC1, y = PC2) + geom_point()
 ```
 
 ## Stopping RStudio
