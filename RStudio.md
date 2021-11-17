@@ -128,6 +128,7 @@ data %>% left_join(sites) %>% left_join(languages) %>%
 ```
 gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME]_neurogap.mds .
 gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME].mds .
+gsutil cp gs://neurogap_phenos_genos/gnomad_meta_hgdp_tgp_v1.txt .
 ```
 - Read it in
 ```
@@ -139,6 +140,9 @@ ggplot(pca_data) + aes(x = C1, y = C2) + geom_point()
 ggplot(pca_data) + aes(x = C1, y = C2, color = FID) + geom_point()
 ```
 - So many populations!
+```
+metadata = read_tsv('gnomad_meta_hgdp_tgp_v1.txt')
+```
 - Let's look just at NeuroGAP:
 ```
 neurogap_pca_data = read_table('neurogap.mds')
@@ -147,7 +151,7 @@ neurogap_pca_data %>%
 ```
 - Color this by population
 
-```bash
+```
 neurogap_pca_data %>%
   ggplot + aes(x = C1, y = C2, color=FID) + geom_point() +
   scale_color_brewer(palette = 'Set1') +
