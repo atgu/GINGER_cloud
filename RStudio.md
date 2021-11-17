@@ -132,8 +132,13 @@ gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME].mds .
 - Read it in
 ```
 pca_data = read_tsv("[YOURNAME].mds")
-ggplot(pca_data) + aes(x = PC1, y = PC2) + geom_point()
+ggplot(pca_data) + aes(x = C1, y = C2) + geom_point()
 ```
+- Plot this colored by population
+```
+ggplot(pca_data) + aes(x = C1, y = C2, color = FID) + geom_point()
+```
+- So many populations!
 
 ## Stopping RStudio
 
