@@ -141,12 +141,19 @@ ggplot(pca_data) + aes(x = C1, y = C2, color = FID) + geom_point()
 - So many populations!
 - Let's look just at NeuroGAP:
 ```
-neurogap_pca_data = read_table('[YOURNAME]_neurogap.mds')
+neurogap_pca_data = read_table('neurogap.mds')
 neurogap_pca_data %>%
-  ggplot + aes(x = C1, y = C2) + geom_point()
+  ggplot + aes(x = C1, y = C2, color=FID) + geom_point() 
 ```
 - Color this by population
 
+```bash
+neurogap_pca_data %>%
+  ggplot + aes(x = C1, y = C2, color=FID) + geom_point() +
+  scale_color_brewer(palette = 'Set1') +
+  theme_bw() +
+  xlab('PC1') + ylab('PC2')
+```
 ## Stopping RStudio
 
 - Go back to the [RStudio page](https://console.cloud.google.com/marketplace/product/rstudio-launcher-public/rstudio-server-pro-standard-for-gcp?q=search&referrer=search&project=gingeriimak). You can also search for it again.
