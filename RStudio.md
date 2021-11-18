@@ -111,52 +111,105 @@ sites = extract_from_field(data_dict, 'study_site', 'site')
 
 - Combine these in to get the annotations in
 ```
-data %>%
-  left_join(ethnicities) %>%
-  left_join(languages) %>%
-  count(ethnicity, language) %>%
-  ggplot + aes(x = ethnicity, y = language, fill = n) +
-  geom_tile()
-
 data %>% left_join(countries) %>% left_join(languages) %>%
   count(country, language) %>%
   group_by(country) %>%
   slice_max(order_by = n, n = 3)
 ```
 
-## PCA data
-- Let's get your data
+## Day 4
+
+## Consent languages
+- Maybe consent language is a bit more usable:
+  - Let's confirm that everyone was consented in a language that they self-reported speaking
 ```
-gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME]_neurogap.mds .
+data %>%
+  count(consent_lang %in% c(lang_self_1, lang_self_2, lang_self_3))
+```
+- What were the top consent languages by country?
+```
+consent_languages = extract_from_field(data_dict, 'consent_lang', 'language')
+data %>%
+  left_join(countries) %>% left_join(consent_languages) %>%
+  count(country, language) %>%
+  group_by(country) %>% slice_max(order_by = n, n = 10)
+```
+- What is the breakdown by cases and controls:
+```
+data %>% left_join(countries) %>% left_join(consent_languages) %>%
+  count(country, language, case=if_else(is_case == 1, 'case', 'control'))
+```
+- Hmm, it's a bit annoying to have cases and controls on separate lines.
+- Let's pivot this table to make it wide. Now if I can remember how to use pivot_wider:
+```
+?pivot_wider
+```
+- `names_from` and `values_from` are the 2 important fields
+```
+data %>% left_join(countries) %>% left_join(consent_languages) %>%
+  count(country, language, case=if_else(is_case == 1, 'case', 'control')) %>%
+  pivot_wider(names_from=case, values_from=n)
+```
+- Those `NA`s will get in the way. Let's make them zero:
+```
+data %>% left_join(countries) %>% left_join(consent_languages) %>%
+  count(country, language, case=if_else(is_case == 1, 'case', 'control')) %>%
+  pivot_wider(names_from=case, values_from=n, values_fill = 0)
+```
+- There are a few languages+countries with low case counts. Let's get rid of those:
+```
+data %>% left_join(countries) %>% left_join(consent_languages) %>%
+  count(country, language, case=if_else(is_case == 1, 'case', 'control')) %>%
+  pivot_wider(names_from=case, values_from=n, values_fill = 0) %>%
+  filter(case > 10)
+```
+- Let's get the proportion of cases by language+country
+```
+data %>% left_join(countries) %>% left_join(consent_languages) %>%
+  count(country, language, case=if_else(is_case == 1, 'case', 'control')) %>%
+  pivot_wider(names_from=case, values_from=n, values_fill = 0) %>%
+  filter(case > 10) %>%
+  mutate(proportion_case = case / (case + control))
+```
+
+## PCA data
+- Let's get your data (and some metadata)
+```
+gsutil cp gs://neurogap_phenos_genos/pca/neurogap.mds .
 gsutil cp gs://neurogap_phenos_genos/pca/[YOURNAME].mds .
 gsutil cp gs://neurogap_phenos_genos/gnomad_meta_hgdp_tgp_v1.txt .
 ```
 - Read it in
 ```
 pca_data = read_tsv("[YOURNAME].mds")
-ggplot(pca_data) + aes(x = C1, y = C2) + geom_point()
+ggplot(pca_data) + aes(x = C1, y = C2) + geom_point() +
+  xlab('PC1') + ylab('PC2')
 ```
 - Plot this colored by population
 ```
-ggplot(pca_data) + aes(x = C1, y = C2, color = FID) + geom_point()
+ggplot(pca_data) + aes(x = C1, y = C2, color = FID) + geom_point() +
+  xlab('PC1') + ylab('PC2')
 ```
-- So many populations!
+- So many populations! We should collapse them a bit. We have a metadata file for the 1000 Genomes and HGDP datasets
 ```
 metadata = read_tsv('gnomad_meta_hgdp_tgp_v1.txt')
+pca_data %>%
+  left_join(metadata %>% select(project_meta.sample_id, hgdp_tgp_meta.Genetic.region), by=c('IID' = 'project_meta.sample_id')) %>%
+  mutate(pop=if_else(!is.na(hgdp_tgp_meta.Genetic.region), hgdp_tgp_meta.Genetic.region, FID))  %>%
+  ggplot + aes(x = C1, y = C2, color = pop) + geom_point()
 ```
 - Let's look just at NeuroGAP:
 ```
 neurogap_pca_data = read_table('neurogap.mds')
 neurogap_pca_data %>%
-  ggplot + aes(x = C1, y = C2, color=FID) + geom_point() 
+  ggplot + aes(x = C1, y = C2, color=FID) + geom_point() +
+  xlab('PC1') + ylab('PC2')
 ```
 - Color this by population
-
 ```
 neurogap_pca_data %>%
   ggplot + aes(x = C1, y = C2, color=FID) + geom_point() +
   scale_color_brewer(palette = 'Set1') +
-  theme_bw() +
   xlab('PC1') + ylab('PC2')
 ```
 ## Stopping RStudio
