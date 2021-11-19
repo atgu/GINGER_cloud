@@ -17,4 +17,5 @@
 - [Rstudio part 2](https://github.com/atgu/GINGER_cloud/blob/main/RStudio.md#day-4)
 
 ### Additional resources:
+- [dplyr cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 - [ATGU video on cloud computing](https://drive.google.com/file/d/1xTXHNsUWqC1Zc-on6aWovduj7yaRbaMM/view?usp=sharing)
