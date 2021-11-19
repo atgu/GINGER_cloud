@@ -181,7 +181,7 @@ gsutil cp gs://neurogap_phenos_genos/gnomad_meta_hgdp_tgp_v1.txt .
 ```
 - Read it in
 ```
-pca_data = read_tsv("[YOURNAME].mds")
+pca_data = read_table("[YOURNAME].mds")
 ggplot(pca_data) + aes(x = C1, y = C2) + geom_point() +
   xlab('PC1') + ylab('PC2')
 ```
