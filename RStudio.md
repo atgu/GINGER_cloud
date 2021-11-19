@@ -171,6 +171,130 @@ data %>% left_join(countries) %>% left_join(consent_languages) %>%
   filter(case > 10) %>%
   mutate(proportion_case = case / (case + control))
 ```
+## Day 4 live-coding
+### 
+```
+```
+### 
+```
+```
+### 
+```
+```
+### Are only females pregnant?
+```
+data %>%
+  count(msex, is_pregnant)
+```
+### 
+```
+data %>% filter(is_pregnant == 1 & msex == 0 & is_case == 0) %>% summarise(mean(kten_total))
+```
+### Initial exploration of all substance use phenotypes with case status
+```
+data %>%
+  select_at(vars(is_case, msex, starts_with('assist') & !ends_with('amt'))) %>% 
+  lm(is_case ~ ., data=.) %>% summary
+```
+### Depression question by pilot samples
+```
+neurogap_pca_data = read_table('neurogap.mds')
+data %>%
+  mutate(pilot_sample = subj_id %in% neurogap_pca_data$IID) -> data
+data %>% count(pilot_sample)
+
+kten1gmap = extract_from_field(data_dict, 'kten_q1g', 'kten_question1g')
+data %>% left_join(kten1gmap) %>%
+  count(pilot_sample = if_else(pilot_sample, 'Pilot', 'Rest'), kten_q1g, kten_question1g) %>%
+  group_by(pilot_sample) %>%
+  mutate(proportion = n/sum(n)) %>% 
+  pivot_wider(names_from = pilot_sample, values_from = c(n, proportion))
+
+```
+### Consents: UBACC total score by site
+```
+data %>%
+  left_join(countries) %>%
+  group_by(country) %>%
+  summarize(mean_ubacc = mean(ubacc_score_t1, na.rm=T))
+
+data %>%
+  left_join(countries) %>%
+  left_join(consent_languages) %>%
+  group_by(country, language) %>%
+  summarize(mean_ubacc = mean(ubacc_score_t1, na.rm=T),
+            n=n()) %>%
+  filter(n > 10) %>%
+  arrange(desc(mean_ubacc))
+```
+### Pivot consent by education status
+```
+education = extract_from_field(data_dict, 'education', 'education_level')
+data %>%
+  left_join(countries) %>%
+  left_join(education) %>%
+  lm(ubacc_score_t1 ~ education, data=.) %>%
+  summary
+
+data %>%
+  left_join(countries) %>%
+  left_join(education) %>%
+  ggplot + aes(x = education, y = ubacc_score_t1, group = education) +
+  geom_boxplot()
+
+```
+### Check by case status
+```
+data %>%
+  left_join(countries) %>%
+  left_join(education) %>%
+  group_by(is_case) %>%
+  summarize(mean(ubacc_score_t1, na.rm=T))
+ 
+data %>%
+  left_join(countries) %>%
+  left_join(education) %>%
+  ggplot + aes(x = ubacc_score_t1, fill = is_case == 1) +
+  geom_histogram(alpha=0.5, position='dodge')
+```
+### Get the number of tries it took to pass the UBACC
+```
+data %>%
+  mutate(n_trials = case_when(ubacc_score_t1 >= 20 ~ 1,
+                              ubacc_score_t2 >= 20 ~ 2,
+                              ubacc_score_t3 >= 20 ~ 3,
+                              ubacc_score_t4 >= 15 ~ 4)) %>%
+  count(n_trials)
+```
+### HIV status concordance (self-report vs CIDI)
+```
+data %>%
+  count(chart=hiv_positive, self_report=cidi_q15)
+```
+### Look for discordance in HIV status by country
+```
+data %>% left_join(countries) %>%
+  filter(hiv_positive == 1 & cidi_q15 == 0) %>%
+  count(country)
+```
+### Look for missingness by country
+```
+data %>% left_join(countries) %>%
+  count(country, missing_chart=is.na(hiv_positive),
+        missing_self_report=is.na(cidi_q15))
+
+```
+### BPD mini vs chart
+```
+data %>% left_join(countries) %>%
+  count(mini_BPD1_Past, chart_review_bipolar=psychosis_primary == 2)
+```
+### Pairwise correlation of variables
+```
+library(corrplot)
+data %>% select_if(is.numeric) %>% cor() -> corr_matrix
+corrplot(corr_matrix[colSums(!is.na(corr_matrix)) > 1, colSums(!is.na(corr_matrix)) > 1])
+```
 
 ## PCA data
 - Let's get your data (and some metadata)
