@@ -1,4 +1,4 @@
-# RStudio in the cloud
+m# RStudio in the cloud
 
 ## Starting RStudio
 
@@ -197,6 +197,12 @@ pca_data %>%
   left_join(metadata %>% select(project_meta.sample_id, hgdp_tgp_meta.Genetic.region), by=c('IID' = 'project_meta.sample_id')) %>%
   mutate(pop=if_else(!is.na(hgdp_tgp_meta.Genetic.region), hgdp_tgp_meta.Genetic.region, FID))  %>%
   ggplot + aes(x = C1, y = C2, color = pop) + geom_point()
+  
+# Shapes too
+pca_data %>%
+  left_join(metadata %>% select(project_meta.sample_id, hgdp_tgp_meta.Genetic.region), by=c('IID' = 'project_meta.sample_id')) %>%
+  mutate(pop=if_else(!is.na(hgdp_tgp_meta.Genetic.region), hgdp_tgp_meta.Genetic.region, FID), neurogap_pop=if_else(is.na(hgdp_tgp_meta.Genetic.region), FID, ''))  %>%
+  ggplot + aes(x = C1, y = C2, color = pop, shape=neurogap_pop) + geom_point()
 ```
 - Let's look just at NeuroGAP:
 ```
