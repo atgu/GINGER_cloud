@@ -1,4 +1,4 @@
-m# RStudio in the cloud
+# RStudio in the cloud
 
 ## Starting RStudio
 
@@ -172,23 +172,57 @@ data %>% left_join(countries) %>% left_join(consent_languages) %>%
   mutate(proportion_case = case / (case + control))
 ```
 ## Day 4 live-coding
-### 
+### Assess alcohol usage in bipolar diagnosed individuals
 ```
+data %>% 
+  count(bipolar = psychosis_primary == 2, assist_alcohol=if_else(assist_alcohol == 1, 'True', 'False')) %>%
+  pivot_wider(names_from=assist_alcohol, values_from=n) %>%
+  mutate(proportion_alcohol = True / (True + False))
 ```
-### 
+### Split this by country
 ```
+data %>% left_join(countries) %>%
+  count(country, bipolar = psychosis_primary == 2, assist_alcohol=if_else(assist_alcohol == 1, 'True', 'False')) %>%
+  pivot_wider(names_from=assist_alcohol, values_from=n) %>%
+  mutate(proportion_alcohol = True / (True + False))
 ```
-### 
+### Among those using alcohol, what is their usage, split by case/control/other status?
 ```
+data %>% count(bipolar = case_when(psychosis_primary != 2 ~ 'bipolar case',
+                                   is.na(psychosis_primary) ~ 'control',
+                                   TRUE ~ 'other psychosis'),
+               assist_alcohol_amt) %>%
+  filter(!is.na(assist_alcohol_amt)) %>%
+  group_by(bipolar) %>%
+  mutate(proportion=n/sum(n)) %>%
+  ggplot + aes(x = assist_alcohol_amt, y = proportion, fill = bipolar) +
+  geom_bar(stat='identity', position='dodge')
+```
+### Khat usage by country, bipolar case/control/other
+```
+data %>% left_join(countries) %>%
+  count(country, bipolar = case_when(is.na(psychosis_primary) ~ 'other psychosis',
+                                     psychosis_primary != 2 ~ 'bipolar case',
+                                     TRUE ~ 'control'),
+        assist_khat) %>%
+  group_by(country, bipolar) %>%
+  mutate(proportion=n/sum(n)) %>%
+  ggplot + aes(x = assist_khat, y = proportion, fill = bipolar) +
+  geom_bar(stat='identity', position='dodge') +
+  facet_grid(country ~ bipolar)
 ```
 ### Are only females pregnant?
 ```
 data %>%
   count(msex, is_pregnant)
 ```
-### 
+### Filter to pregnant female cases and look at K10
 ```
 data %>% filter(is_pregnant == 1 & msex == 0 & is_case == 0) %>% summarise(mean(kten_total))
+```
+### Put that in context:
+```
+data %>% filter(is_case == 0) %>% group_by(msex, is_pregnant) %>% summarise(mean_kten = mean(kten_total, na.rm=T), n=n())
 ```
 ### Initial exploration of all substance use phenotypes with case status
 ```
